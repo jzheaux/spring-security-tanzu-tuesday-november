@@ -21,7 +21,9 @@ public class SecurityConfig {
 			.authorizeRequests((authz) -> authz
 				.anyRequest().authenticated()
 			)
-			.httpBasic(withDefaults());
+			.oauth2ResourceServer((oauth2) -> oauth2
+				.jwt(withDefaults())
+			);
 		return http.build();
 	}
 
@@ -32,22 +34,9 @@ public class SecurityConfig {
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/sentiment/**")
 						.allowedOrigins("http://localhost:8080")
-						.allowedHeaders("X-CSRF-TOKEN")
-						.exposedHeaders("X-CSRF-TOKEN")
-						.allowCredentials(true)
+						.allowedHeaders("Authorization")
 						.maxAge(0);
 			}
 		};
-	}
-
-	@Bean
-	UserDetailsService users() {
-		return new InMemoryUserDetailsManager(
-				User.withDefaultPasswordEncoder()
-						.username("bob")
-						.password("tanzu")
-						.authorities("app")
-						.build()
-		);
 	}
 }
