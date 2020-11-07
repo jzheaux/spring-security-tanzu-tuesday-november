@@ -1,1 +1,20 @@
 logging.level.org.springframework.security: TRACE
+
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          spring:
+            authorization-uri: http://idp:8280/oauth2/authorize
+            token-uri: http://idp:8280/oauth2/token
+            user-info-uri: http://idp:8280/user
+            jwk-set-uri: http://idp:8280/oauth2/jwks
+            user-name-attribute: sub
+        registration:
+          spring:
+            client-id: sentiment-client
+            client-secret: secret
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: sentiment.read,sentiment.write

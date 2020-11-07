@@ -24,7 +24,7 @@ $( document ).ajaxComplete((event, xhr) => {
 });
 
 const sentiment = {
-    root: "http://localhost:8180/sentiment",
+    root: "http://localhost:8080/sentiment",
     read: () => $.get(sentiment.root, (data) => $("#sentiment").html(data.sentiment)),
     _up: (url) => $.post(url, (data) => $("#sentiment").html(data.sentiment)),
     _down: (url) => $.post(url, (data) => $("#sentiment").html(data.sentiment))
@@ -32,10 +32,7 @@ const sentiment = {
 
 const security = {
     authorize: () => {
-        return pkce.authorize();
-    },
-    token: (params) => {
-        return pkce.token(params);
+        location.reload();
     },
     csrf: {
         header: "x-csrf-token"
@@ -46,10 +43,5 @@ const security = {
 };
 
 $(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    security.token(urlParams)
-        .then((token) => {
-            security.accessToken = token;
-            sentiment.read();
-        });
+    sentiment.read();
 });

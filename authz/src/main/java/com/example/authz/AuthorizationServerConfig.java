@@ -20,8 +20,6 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class AuthorizationServerConfig {
@@ -29,20 +27,8 @@ public class AuthorizationServerConfig {
 	@Bean
 	@Order(1)
 	SecurityFilterChain oauth2Endpoints(HttpSecurity http) throws Exception {
-		http.cors();
 		OAuth2AuthorizationServerSecurity.applyDefaultConfiguration(http);
 		return http.build();
-	}
-
-	@Bean
-	WebMvcConfigurer webMvc() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/oauth2/token")
-						.allowedOrigins("http://localhost:8080");
-			}
-		};
 	}
 
 	// @formatter:off
@@ -53,7 +39,7 @@ public class AuthorizationServerConfig {
 				.clientSecret("secret")
 				.clientAuthenticationMethod(ClientAuthenticationMethod.BASIC)
 				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-				.redirectUri("http://localhost:8080")
+				.redirectUri("http://localhost:8080/login/oauth2/code/spring")
 				.scope("sentiment.read")
 				.scope("sentiment.write")
 				.clientSettings((settings) -> settings.requireUserConsent(true))
