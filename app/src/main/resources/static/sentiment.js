@@ -8,11 +8,23 @@ $( document ).ajaxSend((event, xhr) => {
 });
 
 $( document ).ajaxSuccess((event, xhr, objects, data) => {
-    sentiment.up = () => sentiment._up(sentiment.root + "/up");
-    $("#up-arrow").addClass("enabled")[0].onclick = sentiment.up;
-
-    sentiment.down = () => sentiment._down(sentiment.root + "/down");
-    $("#down-arrow").addClass("enabled")[0].onclick = sentiment.down;
+    const links = data["_links"];
+    if (links) {
+        if (links["up"]) {
+            sentiment.up = () => sentiment._up(sentiment.root + "/up");
+            $("#up-arrow").addClass("enabled")[0].onclick = sentiment.up;
+        } else {
+            delete sentiment.up;
+            delete $("#up-arrow").removeClass("enabled")[0].onclick;
+        }
+        if (links["down"]) {
+            sentiment.down = () => sentiment._down(sentiment.root + "/down");
+            $("#down-arrow").addClass("enabled")[0].onclick = sentiment.down;
+        } else {
+            delete sentiment.down;
+            delete $("#down-arrow").removeClass("enabled")[0].onclick;
+        }
+    }
 
     security.success(xhr);
 });

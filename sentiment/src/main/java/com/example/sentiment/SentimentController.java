@@ -3,6 +3,8 @@ package com.example.sentiment;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.hateoas.EntityModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,20 +17,23 @@ public class SentimentController {
 	private final Map<String, Sentiment> sentiment = new ConcurrentHashMap<>();
 
 	@GetMapping
-	public Sentiment read(Authentication authentication) {
-		return read(authentication.getName());
+	@PreAuthorize("hasAuthority('SCOPE_sentiment.read')")
+	public EntityModel<Sentiment> read(Authentication authentication) {
+		return EntityModel.of(read(authentication.getName()));
 	}
 
 	@PostMapping("/up")
-	public Sentiment up(Authentication authentication) {
+	@PreAuthorize("hasAuthority('SCOPE_sentiment.write')")
+	public EntityModel<Sentiment> up(Authentication authentication) {
 		Sentiment sentiment = read(authentication.getName());
-		return sentiment.up();
+		return EntityModel.of(sentiment.up());
 	}
 
 	@PostMapping("/down")
-	public Sentiment down(Authentication authentication) {
+	@PreAuthorize("hasAuthority('SCOPE_sentiment.write')")
+	public EntityModel<Sentiment> down(Authentication authentication) {
 		Sentiment sentiment = read(authentication.getName());
-		return sentiment.down();
+		return EntityModel.of(sentiment.down());
 	}
 
 	private Sentiment read(String name) {
