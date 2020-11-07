@@ -11,16 +11,19 @@ const sentiment = {
     read: () => $.ajax(sentiment.root,
             {
                 method: 'GET',
+                xhrFields: { withCredentials: true },
                 success: (data) => $("#sentiment").html(data.sentiment)
             }),
     _up: (url) => $.ajax(url,
             {
                 method: 'POST',
+                xhrFields: { withCredentials: true },
                 success: (data) => $("#sentiment").html(data.sentiment)
             }),
     _down: (url) => $.ajax(url,
             {
                 method: 'POST',
+                xhrFields: { withCredentials: true },
                 success: (data) => $("#sentiment").html(data.sentiment)
             })
 };
