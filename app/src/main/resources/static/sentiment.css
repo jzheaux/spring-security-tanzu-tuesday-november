@@ -1,0 +1,29 @@
+body {
+    display: flex;
+}
+
+span {
+    opacity: 50%;
+    font-size: 20vw;
+    font-family: sans-serif;
+    text-align: center;
+    display: block;
+}
+
+span.enabled {
+    opacity: 100%;
+}
+
+span.enabled:hover {
+    cursor: pointer;
+}
+
+ul {
+    width: 25%;
+    margin: auto;
+    padding-left: 0;
+}
+
+li {
+    list-style: none;
+}
