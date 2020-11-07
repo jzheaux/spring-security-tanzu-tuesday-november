@@ -32,6 +32,8 @@ public class SecurityConfig {
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/sentiment/**")
 						.allowedOrigins("http://localhost:8080")
+						.allowedHeaders("X-CSRF-TOKEN")
+						.exposedHeaders("X-CSRF-TOKEN")
 						.allowCredentials(true)
 						.maxAge(0);
 			}
