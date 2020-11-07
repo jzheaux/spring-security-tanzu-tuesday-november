@@ -1,0 +1,9 @@
+server:
+  port: 8280
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://idp:8280/oauth2/jwks
