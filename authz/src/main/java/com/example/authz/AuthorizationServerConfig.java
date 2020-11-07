@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.OAuth2AuthorizationServerSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,9 +20,31 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class AuthorizationServerConfig {
+
+	@Bean
+	@Order(1)
+	SecurityFilterChain oauth2Endpoints(HttpSecurity http) throws Exception {
+		http.cors();
+		OAuth2AuthorizationServerSecurity.applyDefaultConfiguration(http);
+		return http.build();
+	}
+
+	@Bean
+	WebMvcConfigurer webMvc() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/oauth2/token")
+						.allowedOrigins("http://localhost:8080");
+			}
+		};
+	}
+
 	// @formatter:off
 	@Bean
 	public RegisteredClientRepository registeredClientRepository() {
